@@ -1,0 +1,34 @@
+{
+  "name": "tuteplanning",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173",
+    "test:e2e": "start-server-and-test preview http://localhost:4173/ 'cypress open --e2e'",
+    "test:e2e:ci": "start-server-and-test preview http://localhost:4173/ 'cypress run --e2e'",
+    "test:unit": "cypress open --component",
+    "test:unit:ci": "cypress run --component --quiet --reporter spec",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+  },
+  "dependencies": {
+    "firebase": "^9.11.0",
+    "pinia": "^2.0.21",
+    "uuid": "^9.0.0",
+    "vue": "^3.2.38",
+    "vue-json-csv": "^2.1.0",
+    "vue-router": "^4.1.5"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.1.4",
+    "@vitejs/plugin-vue": "^3.0.3",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "cypress": "^10.7.0",
+    "eslint": "^8.22.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-vue": "^9.3.0",
+    "prettier": "^2.7.1",
+    "start-server-and-test": "^1.14.0",
+    "vite": "^3.0.9"
+  }
+}
