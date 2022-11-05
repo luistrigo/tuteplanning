@@ -2,13 +2,13 @@
   <div class="container">
     <div class="nav-home"></div>
     <div class="main-info">
-      <div v-if="rutaHistoria">
+      <div v-if="routeSprint">
         <SprintInfo />
         <New-Player v-if="!player" />
       </div>
     </div>
     <div class="main">
-      <div v-if="rutaHistoria && stories">
+      <div v-if="routeSprint && stories">
         <OpenStory />
       </div>
       <div v-else>
@@ -27,22 +27,19 @@ import { computed, onMounted, ref } from "vue";
 import { ref as ref_db, onValue } from "firebase/database";
 import { db } from "../firebase";
 
-import { getLastVote } from "../helpers/index";
-
 import { useSprintStore } from "@/stores/sprint";
 import SprintInfo from "../components/SprintInfo.vue";
 import CreateStory from "../components/CreateStory.vue";
 import StoriesList from "../components/StoriesList.vue";
 import NewPlayer from "../components/NewPlayer.vue";
 import OpenStory from "../components/OpenStory.vue";
-import { isProxy, toRaw } from 'vue';
 
 
 export default {
   name: "HomeView",
   components: { CreateStory, StoriesList, SprintInfo, NewPlayer, OpenStory },
   setup() {
-    const rutaHistoria = ref("");
+    const routeSprint = ref("");
     const newPlayer = ref("");
    
     const sprint = ref({});
@@ -62,13 +59,14 @@ export default {
       store.setSprint(data);
       let points = "";
       const openStory = store.open();
-      if (openStory) {
-        points = getLastVote(openStory.storyId);
+      if (openStory && openStory.storyId) {
+        points = store.getLastVote();
       } else {
+        store.setTempPoints("");
         return;
       }
-
-      let existe = false;
+      
+      let exists = false;
       let pointsdb = "";
       const storyShow = openStory.story.show ? openStory.story.show : false;
 
@@ -76,13 +74,13 @@ export default {
         Object.entries(openStory.story.players).forEach((p) => {
           const [player, data] = p;
           if (player === newPlayer.value) {
-            existe = true;
+            exists = true;
             pointsdb = data.points;
           }
         });
       }
 
-      if (!existe) {
+      if (!exists) {
         await store.createPlayer(newPlayer.value);
       }
       if (storyShow && pointsdb !== points) {
@@ -95,7 +93,7 @@ export default {
         sprint.value = await store.sprintExists(id);
         store.setSprint(sprint.value);
         const host = import.meta.env.VITE_HOST_NAME;
-        rutaHistoria.value = host+"?sprint=" + id;
+        routeSprint.value = host+"?sprint=" + id;
       }
     });
 
@@ -103,7 +101,7 @@ export default {
       newPlayer,
       sprint,
       stories,
-      rutaHistoria,
+      routeSprint,
       player,
       canEditSprint,
     };

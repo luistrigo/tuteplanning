@@ -362,6 +362,16 @@ input:focus {
   color: hsl(var(--clr-white));
 }
 
+.btn-primary-light {
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-dark-secondary));
+}
+
+.btn-primary-light:hover {
+  background: hsl(var(--clr-white));
+  color: hsl(var(--clr-light-secondary));
+}
+
 .btn-warning {
   background: hsl(var(--clr-warning));
   color: hsl(var(--clr-white));
@@ -493,6 +503,11 @@ table td {
 
 .text-center {
   text-align: center;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
 }
 
 /* app */

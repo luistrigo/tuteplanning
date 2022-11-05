@@ -1,5 +1,5 @@
 <template lang="">
-    <div v-if="!player" class="card tapete">
+    <div class="card tapete">
         <CardsLogo/>
         <label>Nombre del Jugador</label>
         <input type="text" v-model="newPlayer" />
@@ -17,7 +17,7 @@ import { ref } from "vue";
 import CardsLogo from "@/components/CardsLogo.vue"
 import { useSprintStore } from "@/stores/sprint";
 export default {
-  name: "CreatePlayer",
+  name: "NewPlayer",
   components:{CardsLogo},
   setup() {
      const store = useSprintStore();

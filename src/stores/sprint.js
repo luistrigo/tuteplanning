@@ -59,10 +59,9 @@ export const useSprintStore = defineStore("sprint", () => {
     return null;
   });
 
-  function logOut() {
-    user.value = null;
-    router.push("/");
-  }
+  const getOpenStory = computed(() => {
+    return open().story;
+  });
 
   function setSprint(s) {
     sprint.value = s;
@@ -98,18 +97,30 @@ export const useSprintStore = defineStore("sprint", () => {
   }
 
   function setTempPoints(p) {
-    const openStoryId = open().storyId;
-    if (openStoryId) {
-      const t = JSON.parse(localStorage.getItem("tuteplanning"));
-      localStorage.setItem(
-        "tuteplanning",
-        JSON.stringify({
-          ...t,
-          ...{ lastVote: { storyId: openStoryId, points: p } },
-        })
-      );
-      points.value = p;
+    let openStoryId = open().storyId;
+    if (!openStoryId) {
+      openStoryId ="";
     }
+    const t = JSON.parse(localStorage.getItem("tuteplanning"));
+    localStorage.setItem(
+      "tuteplanning",
+      JSON.stringify({
+        ...t,
+        ...{ lastVote: { storyId: openStoryId, points: p } },
+      })
+    );
+    points.value = p;
+  }
+
+  const getLastVote =() => {
+    const openStory = open().storyId;
+    const jsonValue = JSON.parse(localStorage.getItem("tuteplanning"))
+    if (typeof jsonValue !== 'undefined' && typeof jsonValue.lastVote !== 'undefined') {
+      if (jsonValue.lastVote.storyId === openStory) {
+        return jsonValue.lastVote.points ? jsonValue.lastVote.points : 0
+      }
+    }
+    return ""
   }
 
   async function createSprint(newSprint, newPlayer) {
@@ -285,14 +296,34 @@ export const useSprintStore = defineStore("sprint", () => {
       throw new Error(e);
     }
   }
-
+  async function clearVotes(){
+    const openStory = open();
+    if (openStory.storyId) {
+      const playersStory = openStory.story.players;
+        Object.entries(playersStory).forEach(async (p) => {
+          const [key, value] = p;
+          playersStory[key].points = "";
+          playersStory[key].voted = 0;
+        });
+        openStory.story.show=0;
+        try{
+        await set(
+          ref_db(
+            db,
+            `sprints/${sprintId.value}/stories/${openStory.storyId}`
+          ),
+          openStory.story
+        );
+          }
+          catch(e){
+            console.log(e)
+          }
+      }
+  }
   async function voteAgain(storyId) {
     try {
-      await _closeAllStories();
-      await set(
-        ref_db(db, `sprints/${sprintId.value}/stories/${storyId}/open`),
-        1
-      );
+      await _closeAllStories(storyId);
+      await clearVotes();
     } catch (e) {
       console.log(e);
     }
@@ -332,18 +363,25 @@ export const useSprintStore = defineStore("sprint", () => {
     }
   }
 
-  async function _closeAllStories() {
+  async function _closeAllStories(storyId) {
+    storyId = typeof storyId !== 'undefined' ? storyId : "";
     if (sprint.value && sprint.value.stories) {
       const stories_arr = sprint.value.stories;
       Object.entries(stories_arr).forEach(async (s) => {
         const [key, value] = s;
-        if (value && value.open === 1) {
-          await set(
-            ref_db(db, `sprints/${sprintId.value}/stories/${key}/open`),
-            0
-          );
-        }
+        value.open = key === storyId ? 1 : 0;
       });
+      console.log(sprint.value)
+      
+      try{
+        await set(
+          ref_db(db, `sprints/${sprintId.value}`),
+          sprint.value
+        );
+      }
+      catch(e){
+        console.log(e)
+      }
     }
   }
 
@@ -386,7 +424,7 @@ export const useSprintStore = defineStore("sprint", () => {
 
   function isCreator() {
     const t = JSON.parse(localStorage.getItem("tuteplanning"));
-    if (t && typeof t.creator !== "undefined") {
+    if (t && typeof t.creator !== "undefined" && t.creator) {
       return true;
     }
     return false;
@@ -397,11 +435,12 @@ export const useSprintStore = defineStore("sprint", () => {
     getStories,
     getPlayer,
     getSprint,
+    getOpenStory,
+    getLastVote,
     open,
     setSprint,
     setSprintData,
     setSprintId,
-    logOut,
     setPlayer,
     createSprint,
     setStory,
@@ -412,10 +451,10 @@ export const useSprintStore = defineStore("sprint", () => {
     createPlayer,
     sendVote,
     voteAgain,
+    clearVotes,
     deletePlayer,
     sprintExists,
     playerExists,
-    canEditSprint,
     canEditSprint,
   };
 });
