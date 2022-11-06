@@ -248,6 +248,13 @@ select {
   color: hsl(var(--clr-white));
 }
 
+.nav-menu {
+  display: flex;
+  gap:10px;
+  justify-content: right;
+  align-items: center;
+}
+
 .container {
   display: grid;
   grid-gap: 10px;

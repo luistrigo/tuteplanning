@@ -11,10 +11,10 @@
                 </div>
                 <div class="nav-buttons">
                 <a v-if="canEditSprint" class="btn btn-primary-light" @click="showPoints(story.show)">
-                    {{story.show ? "Ocultar puntos" : "Ver Puntos"}}
+                    {{story.show ? t("votes_hide") : t("votes_show")}}
                 </a>
                 <a v-if="canEditSprint" class="btn btn-primary-light" @click="clearVotes()">
-                    Limpiar votos
+                    {{t("votes_clean")}}
                 </a>
                 </div>
             </div>
@@ -47,11 +47,17 @@
 <script>
 import { useSprintStore } from "@/stores/sprint";
 import { computed, onMounted, ref,watch } from "vue";
+import { useI18n } from "vue-i18n";
+
 import Cards from "../components/Cards.vue";
 export default {
   name: "OpenStory",
   components: { Cards },
   setup() {
+    const { t } = useI18n({
+      inheritLocale: true,
+      useScope: 'global',
+    })
     const store = useSprintStore();
     const sprint = computed(() => store.getSprint)
     const story = computed(() => store.getOpenStory)
@@ -95,6 +101,7 @@ export default {
     });
 
     return {
+      t,
       sprint,
       story,
       player,

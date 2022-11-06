@@ -7,19 +7,23 @@
           class   = "btn btn-primary"
           :data   = "jssondata()"
           :name    = "fileName">
-          Descargar CSV
+          {{t("download_csv")}}
       </download-csv>
   </div>
 </template>
 <script>
 import { useSprintStore } from "@/stores/sprint";
-
+import { useI18n } from "vue-i18n";
 import { computed,ref } from "vue";
 
 import StoriesItem from "@/components/StoriesItem.vue"
 export default {
   components:{StoriesItem},
   setup() {
+    const { t, locale } = useI18n({
+      inheritLocale: true,
+      useScope: 'global',
+    })
     const store = useSprintStore();
     const sprint = computed(() => store.getSprint);
     const stories = computed(() => store.getStories);
@@ -53,7 +57,7 @@ export default {
       return storiesArr
     }
 
-    return {fileName, jssondata,canEditSprint,voteAgain,stories };
+    return {t,fileName, jssondata,canEditSprint,voteAgain,stories };
   },
 };
 </script>

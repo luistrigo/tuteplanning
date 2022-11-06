@@ -1,0 +1,28 @@
+{
+    "new_sprint" : "Nuevo sprint",
+    "story_new": "+ Historia",
+    "story_title": "Títutlo *",
+    "story_url" : "Url",
+    "story_score" : "Puntos",
+    "story_voting" : "Votando",
+    "story_voteagain" : "Volver a votar",
+    "strory_create" : "Crear",
+    "player_name" : "Nombre del Jugador",
+    "player_create": "Crear un jugador",
+    "player_exists": "El jugador {name} ya existe, si eres tu, pide al creador de la historia que te borre para crearlo de nuevo",
+    "votes_show": "Ver puntos",
+    "votes_hide": "Ocultar Puntos",
+    "votes_clean": "Limpiar votos",
+    "sprint_share": "Comparte este enlace para invitar a más jugadores",
+    "sprint_label": "Sprint:",
+    "download_csv": "Descargar CSV",
+    "sprint_message_only_creator": "Solo tu puedes crear historias, mostrar ocultar las cartas, editar los puntos", 
+    "sprint_message_anyone": "Cualquiera puede crear historias, mostrar ocultar las cartas, editar los puntos",
+    "sprint_create": "Crear un sprint",
+    "sprint_created": "Tienes un sprint creado",
+    "sprint_goto": "Ir al sprint",
+    "sprint_name": "Nombre del sprint",
+    "sprint_cards_type": "Tipo de cartas",
+    "no_stories": "Aún no se ha creado una historia"
+}
+

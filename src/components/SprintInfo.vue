@@ -1,9 +1,9 @@
 <template lang="">
     <div class="sprint-share card">
-          <h5>Comparte este enlace para invitar a más jugadores</h5>
+          <h5>{{t("sprint_share")}}</h5>
           <div class="share-url">{{ rutaHistoria }}</div>
           <div class="sprint-container">
-          <h3>Sprint: {{ sprint.name }}</h3>
+          <h3>{{t("sprint_label")}} {{ sprint.name }}</h3>
            <div class="edit-sprint" v-if="canEditSprint">
             <div v-if="!showEdit" @click="showEditSprint()" class="edit-data"><img src="/images/edit_light.png"/></div>
             <div  v-show="showEdit" @click="cancelEditSprint()" class="edit-data"><img src="/images/cancel.png"/></div>
@@ -12,7 +12,7 @@
           </div>
          
           <div v-show="showEdit">
-            <label>Nombre</label>
+            <label>{{t("sprint_label")}}</label>
             <input type="text" v-model="oldValue.name"/>
           </div>
         </div>
@@ -20,11 +20,16 @@
 <script>
 import { computed, ref } from "vue";
 import { useSprintStore } from "@/stores/sprint";
+import { useI18n } from "vue-i18n";
 
 export default {
  
   component: "SprintInfo",
   setup() {
+    const { t } = useI18n({
+      inheritLocale: true,
+      useScope: 'global',
+    })
     const store = useSprintStore();
     const sprint = computed(() => store.getSprint);
     const id = store.getSprintId;
@@ -59,6 +64,7 @@ export default {
     };
 
     return {
+      t,
       sprint,
       rutaHistoria,
       showEdit,

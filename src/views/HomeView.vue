@@ -12,7 +12,7 @@
         <OpenStory />
       </div>
       <div v-else>
-        Aún no se ha creado una historia
+       {{t("no_stories")}} 
       </div>
     </div>
     <div class="right-menu stories-container" v-if="player">
@@ -26,6 +26,7 @@
 import { computed, onMounted, ref } from "vue";
 import { ref as ref_db, onValue } from "firebase/database";
 import { db } from "../firebase";
+import { useI18n } from "vue-i18n";
 
 import { useSprintStore } from "@/stores/sprint";
 import SprintInfo from "../components/SprintInfo.vue";
@@ -39,6 +40,10 @@ export default {
   name: "HomeView",
   components: { CreateStory, StoriesList, SprintInfo, NewPlayer, OpenStory },
   setup() {
+    const { t } = useI18n({
+      inheritLocale: true,
+      useScope: 'global',
+    })
     const routeSprint = ref("");
     const newPlayer = ref("");
    
@@ -98,6 +103,7 @@ export default {
     });
 
     return {
+      t,
       newPlayer,
       sprint,
       stories,

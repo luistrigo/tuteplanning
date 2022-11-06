@@ -2,7 +2,6 @@ import { ref, computed, toRaw } from "vue";
 import { defineStore } from "pinia";
 import { ref as ref_db, set, get } from "firebase/database";
 import { db } from "../firebase";
-import router from "../router";
 import { todayFormat } from "../helpers";
 
 import { v4 as uuidv4 } from "uuid";

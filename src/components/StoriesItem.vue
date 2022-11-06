@@ -14,16 +14,16 @@
 
         </div>
         <div class="edit-story" v-show="showEdit">
-          <label>Título</label>
+          <label>{{t("story_title")}}</label>
           <input type="text" v-model="oldValue.title"/>
-           <label>Url</label>
+           <label>{{t("story_url")}}</label>
           <input type="text" v-model="oldValue.url"/>
-          <label>Score</label>
+          <label>{{t("story_score")}}</label>
           <input type="text" v-model="oldValue.score"/>
           </div>
-        <div v-if="story.open===1" class="bg-accent text-white voting">Votando</div>
+        <div v-if="story.open===1" class="bg-accent text-white voting">{{t("story_voting")}}</div>
         <div v-if="story.open!==1 && canEditSprint">
-            <a class="btn btn-primary" @click="voteAgain()">Volver a votar</a>
+            <a class="btn btn-primary" @click="voteAgain()">{{t("story_voteagain")}}</a>
         </div>
     </div>
     <div  class="score" v-if="canEditSprint">
@@ -37,6 +37,8 @@
 <script>
 import { useSprintStore } from "@/stores/sprint";
 import { ref,computed } from "vue";
+import { useI18n } from "vue-i18n";
+
 export default {
   name: "StoriesItem",
   props: {
@@ -45,6 +47,10 @@ export default {
     storyId: String,
   },
   setup(props) {
+    const { t } = useI18n({
+      inheritLocale: true,
+      useScope: 'global',
+    })
     const store = useSprintStore();
     const showEdit = ref(false);
     const canEditSprint = computed(() => store.canEditSprint);
@@ -74,7 +80,7 @@ export default {
     };
 
 
-    return {canEditSprint, showEdit,oldValue, voteAgain, saveStory, cancelEditStory};
+    return {t, canEditSprint, showEdit,oldValue, voteAgain, saveStory, cancelEditStory};
   },
 };
 </script>
