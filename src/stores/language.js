@@ -15,7 +15,6 @@ export const useLanguageStore = defineStore("language", () => {
     }
     //user changes locale, store it in local db
     i18n.global.locale.value = locale;
-    const t = JSON.parse(localStorage.getItem("tuteplanning_locale"));
     localStorage.setItem("tuteplanning_locale", locale);
   }
 
