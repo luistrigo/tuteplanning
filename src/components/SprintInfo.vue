@@ -4,7 +4,7 @@
           <div class="share-url">{{ rutaHistoria }}</div>
           <div class="sprint-container">
           <h3>{{t("sprint_label")}} {{ sprint.name }}</h3>
-           <div class="edit-sprint" v-if="canEditSprint">
+           <div class="edit-sprint" v-if="isCreator">
             <div v-if="!showEdit" @click="showEditSprint()" class="edit-data"><img src="/images/edit_light.png"/></div>
             <div  v-show="showEdit" @click="cancelEditSprint()" class="edit-data"><img src="/images/cancel.png"/></div>
             <div  v-show="showEdit" @click="saveSprint()" class="edit-data"><img src="/images/save.png"/></div>
@@ -15,14 +15,20 @@
 
             <label>{{t("sprint_label")}}</label>
             <input type="text" v-model="oldValue.name"/>
-            <label for="only_creator_edit" >{{oldValue.only_creator_edit === '1' ? t("sprint_message_only_creator") : t("sprint_message_anyone")}} 
+            <div class="card">
+            <label class="label-checkbox" for="only_creator_edit" >
+              <span :class="oldValue.only_creator_edit === '1' ? '' :'text-bold'">{{t("sprint_message_only_creator")}}</span>
+               / 
+              <span :class="oldValue.only_creator_edit === '1' ? 'text-bold' : ''">{{t("sprint_message_anyone")}}</span>  
               <input id="only_creator_edit" type="checkbox" true-value="1" false-value="0" v-model="oldValue.only_creator_edit">
             </label>
-            <!--
-            <label for="only_creator_show" >{{sprint.only_creator_show==1 ? t("sprint_message_only_creator_show") : t("sprint_message_anyone_show")}} 
-              <input id="only_creator_show" type="checkbox" true-value="1" false-value="0" v-model="sprint.only_creator_show">
+            <label class="label-checkbox" for="only_creator_show" >
+              <span :class="oldValue.only_creator_show === '1' ? '' : 'text-bold'">{{t("sprint_message_only_creator_show")}}</span>
+               / 
+              <span :class="oldValue.only_creator_show === '1' ? 'text-bold' : ''">{{t("sprint_message_anyone_show")}}</span>  
+              <input id="only_creator_show" type="checkbox" true-value="1" false-value="0" v-model="oldValue.only_creator_show">
             </label>
-            -->
+          </div>
           </div>
         </div>
 </template>
@@ -45,6 +51,7 @@ export default {
     const host = import.meta.env.VITE_HOST_NAME;
     const showEdit = ref(false);
     const canEditSprint = computed(() => store.canEditSprint);
+    const isCreator = store.isCreator();
 
     const oldValue = ref({name:'',only_creator_edit:'0',only_creator_show:'0'})
 
@@ -80,6 +87,7 @@ export default {
       rutaHistoria,
       showEdit,
       canEditSprint,
+      isCreator,
       showEditSprint,
       cancelEditSprint,
       saveSprint,

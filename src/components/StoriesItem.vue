@@ -22,7 +22,7 @@
           <input type="text" v-model="oldValue.score"/>
           </div>
         <div v-if="story.open===1" class="bg-accent text-white voting">{{t("story_voting")}}</div>
-        <div v-if="story.open!==1 && canEditSprint">
+        <div v-if="story.open!==1 && canShowSprint">
             <a class="btn btn-primary" @click="voteAgain()">{{t("story_voteagain")}}</a>
         </div>
     </div>
@@ -54,6 +54,7 @@ export default {
     const store = useSprintStore();
     const showEdit = ref(false);
     const canEditSprint = computed(() => store.canEditSprint);
+    const canShowSprint = computed(() => store.canShowSprint);
     const oldValue = ref( {
       title: props.story.title,
       url: props.story.url,
@@ -80,7 +81,7 @@ export default {
     };
 
 
-    return {t, canEditSprint, showEdit,oldValue, voteAgain, saveStory, cancelEditStory};
+    return {t, canEditSprint,canShowSprint, showEdit,oldValue, voteAgain, saveStory, cancelEditStory};
   },
 };
 </script>

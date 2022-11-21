@@ -10,10 +10,10 @@
                     <a class="link-light" v-if="story.url" :href="story.url" target="_blank"> {{ story.title}}</a>
                 </div>
                 <div class="nav-buttons">
-                <a v-if="canEditSprint" class="btn btn-primary-light" @click="showPoints(story.show)">
+                <a v-if="canShowSprint" class="btn btn-primary-light" @click="showPoints(story.show)">
                     {{story.show ? t("votes_hide") : t("votes_show")}}
                 </a>
-                <a v-if="canEditSprint" class="btn btn-primary-light" @click="clearVotes()">
+                <a v-if="canShowSprint" class="btn btn-primary-light" @click="clearVotes()">
                     {{t("votes_clean")}}
                 </a>
                 </div>
@@ -33,7 +33,7 @@
                     <span v-if="key !== player && story.show">{{player_s.points}}</span>
                 </div>
                 <div class="trash-player">
-                    <a @click="deletePlayer(key)" v-if="canEditSprint && key !== player">
+                    <a @click="deletePlayer(key)" v-if="canShowSprint && key !== player">
                     <img src="/images/trash.png" style="height:30px"/>
                     </a>
                 </div>
@@ -64,7 +64,7 @@ export default {
     const player = computed(() => store.getPlayer);
     const points = ref("");
     const orderPlayers = ref([]);
-    const canEditSprint = computed(() => store.canEditSprint);
+    const canShowSprint = computed(() => store.canShowSprint);
 
     const showPoints = async (show) => {
       store.showPoints(show);
@@ -123,7 +123,7 @@ export default {
       story,
       player,
       orderPlayers,
-      canEditSprint,
+      canShowSprint,
       points,
       showPoints,
       deletePlayer,

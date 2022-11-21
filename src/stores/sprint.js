@@ -41,6 +41,22 @@ export const useSprintStore = defineStore("sprint", () => {
     return false;
   });
 
+  const canShowSprint = computed(() => {
+    const canShow = isCreator();
+    if (sprint.value) {
+      if (sprint.value.only_creator_show && canShow) {
+        return true;
+      }
+      if (!sprint.value.only_creator_show) {
+        return true;
+      }
+    } else {
+      return canShow;
+    }
+    return false;
+  });
+
+
   const getPlayer = computed(() => {
     if (!player.value) {
       const t = JSON.parse(localStorage.getItem("tuteplanning"));
@@ -459,6 +475,8 @@ export const useSprintStore = defineStore("sprint", () => {
     deletePlayer,
     sprintExists,
     playerExists,
+    isCreator,
     canEditSprint,
+    canShowSprint,
   };
 });

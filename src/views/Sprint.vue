@@ -24,14 +24,20 @@
         </select>
       </div>
       <div class="player-name">
-        <label for="only_creator_edit" >{{sprint.only_creator_edit==1 ? t("sprint_message_only_creator") : t("sprint_message_anyone")}} 
-          <input id="only_creator_edit" type="checkbox" true-value="1" false-value="0" v-model="sprint.only_creator_edit">
-        </label>
-        <!--
-        <label for="only_creator_show" >{{sprint.only_creator_show==1 ? t("sprint_message_only_creator_show") : t("sprint_message_anyone_show")}} 
-          <input id="only_creator_show" type="checkbox" true-value="1" false-value="0" v-model="sprint.only_creator_show">
-        </label>
-        -->
+        <div class="card">
+            <label class="label-checkbox" for="only_creator_edit" >
+              <span :class="sprint.only_creator_edit === '1' ? '' : 'text-bold'">{{t("sprint_message_only_creator")}}</span>
+               / 
+              <span :class="sprint.only_creator_edit === '1' ? 'text-bold' : '' ">{{t("sprint_message_anyone")}}</span>  
+              <input id="only_creator_edit" type="checkbox" true-value="1" false-value="0" v-model="sprint.only_creator_edit">
+            </label>
+            <label class="label-checkbox" for="only_creator_show" >
+              <span :class="sprint.only_creator_show === '1' ? '' : 'text-bold'">{{t("sprint_message_only_creator_show")}}</span>
+               / 
+              <span :class="sprint.only_creator_show === '1' ? 'text-bold' : ''">{{t("sprint_message_anyone_show")}}</span>  
+              <input id="only_creator_show" type="checkbox" true-value="1" false-value="0" v-model="sprint.only_creator_show">
+            </label>
+          </div>
       </div>
       <a class="btn" :class="newPlayer && sprint.name ? 'btn-primary' : 'btn-disabled'" @click="createSprint"
         >{{t("sprint_create")}}</a
@@ -68,8 +74,8 @@ export default {
     const sprint = ref({
       name: '',
       cards:'fibonacci',
-      only_creator_edit: 1,
-      only_creator_show: 1,
+      only_creator_edit: '1',
+      only_creator_show: '1',
     })
     const newPlayer = ref("");
     const router = useRouter();
