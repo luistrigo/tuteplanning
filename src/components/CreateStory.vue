@@ -36,6 +36,7 @@ export default {
       if(newStory.value.title){
         await store.createNewStory(newStory.value)
         showNewStory.value = false;
+        newStory.value = { title: "", url: "" };
       }
     };
     return {
