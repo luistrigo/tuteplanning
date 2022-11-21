@@ -10,7 +10,7 @@ export const useSprintStore = defineStore("sprint", () => {
   const sprint = ref(null);
   const sprintId = ref("");
   const player = ref(null);
-  const points = ref("0");
+  const points = ref("");
 
   const getSprint = computed(() => {
     return sprint.value;
@@ -116,7 +116,7 @@ export const useSprintStore = defineStore("sprint", () => {
     const jsonValue = JSON.parse(localStorage.getItem("tuteplanning"))
     if (typeof jsonValue !== 'undefined' && typeof jsonValue.lastVote !== 'undefined') {
       if (jsonValue.lastVote.storyId === openStory) {
-        return jsonValue.lastVote.points ? jsonValue.lastVote.points : 0
+        return jsonValue.lastVote.points ? jsonValue.lastVote.points : ""
       }
     }
     return ""
@@ -126,7 +126,9 @@ export const useSprintStore = defineStore("sprint", () => {
     const id = uuidv4();
     newSprint.date = todayFormat();
     try {
+      sprint.value = null
       await set(ref_db(db, "sprints/" + id), newSprint);
+      
       _createSprintLocal(id);
 
       setPlayer(newPlayer);
@@ -189,8 +191,11 @@ export const useSprintStore = defineStore("sprint", () => {
   }
 
   async function setSprintData(s) {
+    sprint.value.name = s.name;
+    sprint.value.only_creator_edit = s.only_creator_edit === "1" ? 1: 0
+    sprint.value.only_creator_show = s.only_creator_show === "1" ? 1: 0
     try {
-      await set(ref_db(db, `sprints/${sprintId.value}/name/`), s.name);
+      await set(ref_db(db, `sprints/${sprintId.value}`), sprint.value);
     } catch (e) {
       console.log(e);
     }
@@ -229,7 +234,7 @@ export const useSprintStore = defineStore("sprint", () => {
     }
     const playersStory = openStory.story.players;
     let send = true;
-    Object.entries(playersStory).forEach(async (p) => {
+    Object.entries(playersStory).forEach((p) => {
       const [key, value] = p;
       if (key === player.value) {
         if (openStory.story.show && value.points === points) {
@@ -245,6 +250,8 @@ export const useSprintStore = defineStore("sprint", () => {
     if (!send) {
       return;
     }
+    const voted = points !== "-" && points !== '' ? 1 : 0;
+    points = points !== "-" ? points : "";
     try {
       await set(
         ref_db(
@@ -253,7 +260,7 @@ export const useSprintStore = defineStore("sprint", () => {
         ),
         {
           points: openStory.story.show ? points : "",
-          voted: 1,
+          voted: voted,
           is_creator: 0,
         }
       );
@@ -299,10 +306,9 @@ export const useSprintStore = defineStore("sprint", () => {
     const openStory = open();
     if (openStory.storyId) {
       const playersStory = openStory.story.players;
-        Object.entries(playersStory).forEach(async (p) => {
-          const [key, value] = p;
-          playersStory[key].points = "";
-          playersStory[key].voted = 0;
+        Object.values(playersStory).forEach((p) => {
+          p.points = "-";
+          p.voted = 0;
         });
         openStory.story.show=0;
         try{
@@ -370,7 +376,6 @@ export const useSprintStore = defineStore("sprint", () => {
         const [key, value] = s;
         value.open = key === storyId ? 1 : 0;
       });
-      console.log(sprint.value)
       
       try{
         await set(

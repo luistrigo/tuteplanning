@@ -75,10 +75,12 @@ export default {
         if (exist) {
           store.setSprintId(sprintId);
           router.push({ name: "home" });
+          return;
         }
-      } else {
-        router.push({ name: "sprint" });
       }
+      store.setSprintId('');
+      router.push({ name: "sprint" });
+      
     });
 
     return { t, setLocale, locale, newSprint };

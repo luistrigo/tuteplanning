@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="right-menu stories-container" v-if="player">
-      <CreateStory v-if="canEditSprint" :player="newPlayer" />
+      <CreateStory v-if="canEditSprint" :player="player" />
       <StoriesList />
     </div>
   </div>
@@ -45,14 +45,13 @@ export default {
       useScope: 'global',
     })
     const routeSprint = ref("");
-    const newPlayer = ref("");
    
     const sprint = ref({});
 
     const store = useSprintStore();
     const player = computed(() => store.getPlayer);
     const stories = computed(() => store.getStories);
-    newPlayer.value = player.value ? player.value : "";
+    
     let id = store.getSprintId;
 
     const canEditSprint = computed(() => store.canEditSprint);
@@ -62,6 +61,14 @@ export default {
       const data = snapshot.val();
       
       store.setSprint(data);
+
+      setTimeout(function(){
+        setPlayer()
+      },300)
+      
+    });
+
+    const setPlayer = async () =>{
       let points = "";
       const openStory = store.open();
       if (openStory && openStory.storyId) {
@@ -77,8 +84,8 @@ export default {
 
       if (openStory.story.players) {
         Object.entries(openStory.story.players).forEach((p) => {
-          const [player, data] = p;
-          if (player === newPlayer.value) {
+          const [playerArr, data] = p;
+          if (playerArr === player.value) {
             exists = true;
             pointsdb = data.points;
           }
@@ -86,12 +93,15 @@ export default {
       }
 
       if (!exists) {
-        await store.createPlayer(newPlayer.value);
+        await store.createPlayer(player.value);
       }
       if (storyShow && pointsdb !== points) {
-        store.sendVote(points);
+        await store.sendVote(points);
       }
-    });
+      if(!storyShow && pointsdb === "-"){
+        await store.setTempPoints("");
+      }
+    }
 
     onMounted(async () => {
       if (id) {
@@ -104,7 +114,6 @@ export default {
 
     return {
       t,
-      newPlayer,
       sprint,
       stories,
       routeSprint,
