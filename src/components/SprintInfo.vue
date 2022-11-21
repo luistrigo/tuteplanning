@@ -11,9 +11,18 @@
           </div>
           </div>
          
-          <div v-show="showEdit">
+          <div v-show="showEdit" class="card">
+
             <label>{{t("sprint_label")}}</label>
             <input type="text" v-model="oldValue.name"/>
+            <label for="only_creator_edit" >{{oldValue.only_creator_edit === '1' ? t("sprint_message_only_creator") : t("sprint_message_anyone")}} 
+              <input id="only_creator_edit" type="checkbox" true-value="1" false-value="0" v-model="oldValue.only_creator_edit">
+            </label>
+            <!--
+            <label for="only_creator_show" >{{sprint.only_creator_show==1 ? t("sprint_message_only_creator_show") : t("sprint_message_anyone_show")}} 
+              <input id="only_creator_show" type="checkbox" true-value="1" false-value="0" v-model="sprint.only_creator_show">
+            </label>
+            -->
           </div>
         </div>
 </template>
@@ -37,7 +46,7 @@ export default {
     const showEdit = ref(false);
     const canEditSprint = computed(() => store.canEditSprint);
 
-    const oldValue = ref({name:''})
+    const oldValue = ref({name:'',only_creator_edit:'0',only_creator_show:'0'})
 
     const rutaHistoria = computed(() => {
       return host+"?sprint=" + id;
@@ -48,19 +57,21 @@ export default {
       if(sprint.value){
         showEdit.value = true;
         oldValue.value.name = sprint.value.name
+        oldValue.value.only_creator_edit = sprint.value.only_creator_edit ==1 ? '1' :'0'
+        oldValue.value.only_creator_show = sprint.value.only_creator_show ==1 ? '1' :'0'
        
       }
     };
     const saveSprint = async () => {
-      if(oldValue.value.name){
         showEdit.value = false;
         await store.setSprintData(oldValue.value);
-      }
     };
 
     const cancelEditSprint =() => {
         showEdit.value = false;
         oldValue.value.name = sprint.value.name
+        oldValue.value.only_creator_edit = sprint.value.only_creator_edit ==1 ? '1' :'0'
+        oldValue.value.only_creator_show = sprint.value.only_creator_show ==1 ? '1' :'0'
     };
 
     return {

@@ -16,12 +16,16 @@
     "sprint_share": "Share this link to invite more players",
     "sprint_label": "Sprint:",
     "download_csv": "Download CSV",
-    "sprint_message_only_creator": "Only you can create stories, show hide cards, edit points", 
-    "sprint_message_anyone": "Anyone can create stories, show hide cards, edit points",
+    "sprint_message_only_creator": "Only you can create and edit stories", 
+    "sprint_message_anyone": "Anyone can create edit stories",
     "sprint_create": "Create a sprint",
+    "sprint_message_only_creator_show": "Only you can show hide cards", 
+    "sprint_message_anyone_show": "Anyone can show hide cards",
     "sprint_created": "You have a sprint created",
     "sprint_goto": "Go to sprint",
     "sprint_name": "Sprint name",
     "sprint_cards_type": "Cards type",
-    "no_stories": "No story created yet"
+    "no_stories": "No story created yet",
+    "no": "No",
+    "yes":"Yes"
 }
