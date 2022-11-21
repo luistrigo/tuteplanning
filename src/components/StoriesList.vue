@@ -1,6 +1,6 @@
 <template lang="">
   <div>
-    <div class="closed stories" v-for="(story, key, index) in stories" :key="index">
+    <div class="closed stories" v-for="(story, key, index) in order_stories" :key="key">
       <StoriesItem :storyId="key" :story="story"/>
     </div>
     <download-csv v-if="canEditSprint"
@@ -15,6 +15,7 @@
 import { useSprintStore } from "@/stores/sprint";
 import { useI18n } from "vue-i18n";
 import { computed,ref } from "vue";
+import { query, orderBy, limit } from "firebase/firestore"; 
 
 import StoriesItem from "@/components/StoriesItem.vue"
 export default {
@@ -31,6 +32,18 @@ export default {
       await store.voteAgain(storyId);
     };
     const canEditSprint = computed(() => store.canEditSprint);
+
+    const order_stories = computed(()=> {
+      if(stories.value){
+        const order = Object.fromEntries(Object.entries(stories.value)
+          .sort(([,a],[,b]) => {
+          return ((a.date.toLowerCase()< b.date.toLowerCase()) ? 1 : ((a.date.toLowerCase() > b.date.toLowerCase()) ? -1 : 0));
+          }))
+          
+        return order
+      }
+      return [];
+    });
     
     const fileName = computed(()=>{
       if(!sprint.value){
@@ -57,7 +70,7 @@ export default {
       return storiesArr
     }
 
-    return {t,fileName, jssondata,canEditSprint,voteAgain,stories };
+    return {t,fileName, jssondata,canEditSprint,voteAgain,order_stories };
   },
 };
 </script>

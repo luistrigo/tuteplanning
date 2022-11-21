@@ -22,3 +22,29 @@ export const todayFormat = () =>{
   ("00" + date.getMinutes()).slice(-2) + ":" +
   ("00" + date.getSeconds()).slice(-2);
 }
+
+//example configOrder = [{field1: 'asc'},{field2:'desc'}]
+export const helperOrderBy = (data, configOrder) => {
+  configOrder = Array.isArray(configOrder) ? configOrder : [configOrder];
+        return data.sort(([kA,a],[kB,b]) => {
+            for (let i = 0, size = configOrder.length; i < size; i++) {
+                const key = Object.keys(configOrder[i])[0],
+                    o = configOrder[i][key],
+                    valueA = key === 'name' ? kA: a[key],
+                    valueB = key === 'name' ? kB: b[key];
+                if ((typeof valueA === 'undefined' || typeof valueB === 'undefined')) {
+                    console.error("Data passed does not have the key '" + key + "' passed on sort!");
+                    return [];
+                }
+                if (+valueA === +valueA) {
+                    return o.toLowerCase() === 'desc' ? valueB - valueA : valueA - valueB;
+                } else {
+                    if (valueA.localeCompare(valueB) > 0) {
+                        return o.toLowerCase() === 'desc' ? -1 : 1;
+                    } else if (valueA.localeCompare(valueB) < 0) {
+                        return o.toLowerCase() === 'desc' ? 1 : -1;
+                    }
+                }
+            }
+    })
+}

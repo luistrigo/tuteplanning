@@ -7,7 +7,7 @@
             <div class="story-title">
                 <div class="story-name">
                     <span v-if="!story.url">{{ story.title }}</span>
-                    <a class="link-light" v-if="story.url" :href="story.url"> {{ story.title}}</a>
+                    <a class="link-light" v-if="story.url" :href="story.url" target="_blank"> {{ story.title}}</a>
                 </div>
                 <div class="nav-buttons">
                 <a v-if="canEditSprint" class="btn btn-primary-light" @click="showPoints(story.show)">
@@ -22,14 +22,14 @@
                 <li
                 :class="key === player ? 'myself' : ''"
                 class="player"
-                v-for="(player_s, key, index) in story.players"
+                v-for="(player_s, key, index) in orderPlayers"
                 :key="index"
                 >
                 <div class="player-name">{{ key }}</div>
-                <div v-if="player_s.voted === 0">?</div>
+                <div v-if="player_s.voted === 0">{{t('no')}}</div>
                 <div v-if="player_s.voted === 1">
                     <span v-if="key === player">{{ points }}</span>
-                    <span v-if="key !== player && !story.show">si</span>
+                    <span v-if="key !== player && !story.show">{{t('yes')}}</span>
                     <span v-if="key !== player && story.show">{{player_s.points}}</span>
                 </div>
                 <div class="trash-player">
@@ -48,7 +48,7 @@
 import { useSprintStore } from "@/stores/sprint";
 import { computed, onMounted, ref,watch } from "vue";
 import { useI18n } from "vue-i18n";
-
+import { helperOrderBy } from "../helpers/index.js";
 import Cards from "../components/Cards.vue";
 export default {
   name: "OpenStory",
@@ -63,6 +63,7 @@ export default {
     const story = computed(() => store.getOpenStory)
     const player = computed(() => store.getPlayer);
     const points = ref("");
+    const orderPlayers = ref([]);
     const canEditSprint = computed(() => store.canEditSprint);
 
     const showPoints = async (show) => {
@@ -72,6 +73,21 @@ export default {
     watch(story, () => {
       points.value = store.getLastVote();
     })
+
+    
+    watch(sprint, () => {
+      points.value = store.getLastVote();
+      orderPlayers.value = [];
+      if(typeof story.value.players !== 'undefined'){
+        orderPlayers.value = Object.entries(story.value.players)
+        if(story.value.show === 1){
+        orderPlayers.value = Object.fromEntries(helperOrderBy(Object.entries(story.value.players),[{points:'desc',name:'asc'}]))
+        }else{
+        orderPlayers.value = Object.fromEntries(helperOrderBy(Object.entries(story.value.players),[{name:'asc'}]))
+        }
+      }
+    })
+
 
     const selectCard = async (card) => {
       try {
@@ -97,6 +113,7 @@ export default {
 
     onMounted(() => {
        points.value = store.getLastVote();
+       orderPlayers.value = story.value.players;
      
     });
 
@@ -105,6 +122,7 @@ export default {
       sprint,
       story,
       player,
+      orderPlayers,
       canEditSprint,
       points,
       showPoints,
