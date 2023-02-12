@@ -27,6 +27,9 @@
     "sprint_cards_type": "Tipo de cartas",
     "no_stories": "Aún no se ha creado una historia",
     "no": "No",
-    "yes":"Si"
+    "yes":"Si",
+    "cancel":"Cancelar",
+    "edit":"Editar",
+    "save":"Guardar"
 }
 

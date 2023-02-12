@@ -5,9 +5,9 @@
           <div class="sprint-container">
           <h3>{{t("sprint_label")}} {{ sprint.name }}</h3>
            <div class="edit-sprint" v-if="isCreator">
-            <div v-if="!showEdit" @click="showEditSprint()" class="edit-data"><img src="/images/edit_light.png"/></div>
-            <div  v-show="showEdit" @click="cancelEditSprint()" class="edit-data"><img src="/images/cancel.png"/></div>
-            <div  v-show="showEdit" @click="saveSprint()" class="edit-data"><img src="/images/save.png"/></div>
+            <div v-if="!showEdit" @click="showEditSprint()" class="edit-data btn btn-primary"><img src="/images/edit_light.png"/></div>
+            <div  v-show="showEdit" @click="cancelEditSprint()" class="edit-data btn btn-primary-light">{{t("cancel")}}</div>
+            <div  v-show="showEdit" @click="saveSprint()" class="edit-data btn btn-primary">{{t("save")}}</div>
           </div>
           </div>
          

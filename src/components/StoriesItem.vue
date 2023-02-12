@@ -1,17 +1,12 @@
 <template lang="">
     <div class="storie">
-        <div class="story-name">
+        <div class="story-name" v-show="!showEdit">
             <a class="link" v-if="story.url" :href="story.url" target="_blank">
                 {{story.title}}
             </a>
             <span v-if="!story.url">
                 {{story.title}}
             </span>
-            <div class="edit-store" v-if="canEditSprint">
-            <div  v-show="showEdit" @click="cancelEditStory()" class="edit-data"><img src="/images/cancel.png"/></div>
-            <div  v-show="showEdit" @click="saveStory()" class="edit-data"><img src="/images/save.png"/></div>
-            </div>
-
         </div>
         <div class="edit-story" v-show="showEdit">
           <label>{{t("story_title")}}</label>
@@ -20,6 +15,10 @@
           <input type="text" v-model="oldValue.url"/>
           <label>{{t("story_score")}}</label>
           <input type="text" v-model="oldValue.score"/>
+          <div class="edit-story-buttons" v-if="canEditSprint">
+            <div @click="cancelEditStory()" class="btn btn-primary-light">{{t("cancel")}}</div>
+            <div @click="saveStory()" class="btn btn-primary">{{t("save")}}</div>
+            </div>
           </div>
         <div v-if="story.open===1" class="bg-accent text-white voting">{{t("story_voting")}}</div>
         <div v-if="story.open!==1 && canShowSprint">
@@ -27,8 +26,8 @@
         </div>
     </div>
     <div  class="score" v-if="canEditSprint">
-      <div v-if="!showEdit" @click="showEdit = !showEdit" class="edit-score"><img src="/images/edit_light.png"/></div>
       <div class="fs-800 text-center">{{story.score ? story.score :"?"}}</div>
+      <div v-if="!showEdit" @click="showEdit = !showEdit" class="edit-data btn btn-primary"><img src="/images/edit_light.png"/></div>
     </div>
     <div  class="score" v-if="!canEditSprint">
       <div class="fs-800 text-center">{{story.score ? story.score :"?"}}</div>
@@ -94,14 +93,13 @@ export default {
   background-color: hsl(var(--clr-dark-secondary));
   color: hsl(var(--clr-white));
   border-radius: 0 20px 20px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .score .edit-score {
-  position: absolute;
-  bottom: 5px;
-  left: 5px;
-  max-width: 15px;
-  
+  text-align: center;
 }
 
 .score input {

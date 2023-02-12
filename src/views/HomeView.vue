@@ -1,13 +1,12 @@
 <template>
   <div class="container">
     <div class="nav-home"></div>
-    <div class="main-info">
+    <div class="main">
       <div v-if="routeSprint">
         <SprintInfo />
         <New-Player v-if="!player" />
       </div>
-    </div>
-    <div class="main">
+      <div class="board">
       <div v-if="routeSprint && stories">
         <OpenStory />
       </div>
@@ -15,6 +14,8 @@
        {{t("no_stories")}} 
       </div>
     </div>
+    </div>
+   
     <div class="right-menu stories-container" v-if="player">
       <CreateStory v-if="canEditSprint" :player="player" />
       <StoriesList />

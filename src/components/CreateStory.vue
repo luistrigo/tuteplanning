@@ -5,6 +5,12 @@
           @click="showNewStory = ! showNewStory"
           >{{t("story_new")}}
         </a>
+        <download-csv v-if="canEditSprint"
+          class   = "btn btn-primary"
+          :data   = "jssondata()"
+          :name    = "fileName">
+          {{t("download_csv")}}
+      </download-csv>
         <template v-if="showNewStory || !stories">
         <label>{{t("story_title")}}</label>
         <input type="text" v-model="newStory.title"/>
@@ -30,7 +36,9 @@ export default {
     const showNewStory = ref(false);
     const newStory = ref({ title: "", url: "" });
     const store = useSprintStore();
-    const stories = computed(()=>store.getStories)
+    const stories = computed(()=>store.getStories);
+    const sprint = computed(() => store.getSprint);
+    const canEditSprint = computed(() => store.canEditSprint);
     
     const createStoryAction = async () => {
       if(newStory.value.title){
@@ -39,11 +47,41 @@ export default {
         newStory.value = { title: "", url: "" };
       }
     };
+
+    const fileName = computed(()=>{
+      if(!sprint.value){
+        return "csv_file.csv";
+      }
+      return sprint.value.name + ".csv"
+    })
+
+    const jssondata =()=>{
+      if(!stories.value){
+        return [];
+      }
+     const storiesArr = Object.entries(stories.value).map(s =>{
+      const [key, value] = s;
+        return {
+          sprint: sprint.value.name,
+          sprint_date:sprint.value.date,
+          name: value.title,
+          ulr: value.url,
+          score: value.score,
+          date: value.date
+        }
+      })
+      return storiesArr
+    }
+
+
     return {
       showNewStory,
       newStory,
       createStoryAction,
       stories,
+      jssondata,
+      fileName,
+      canEditSprint,
       t
     };
   },

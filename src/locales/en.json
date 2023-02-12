@@ -27,5 +27,8 @@
     "sprint_cards_type": "Cards type",
     "no_stories": "No story created yet",
     "no": "No",
-    "yes":"Yes"
+    "yes":"Yes",
+    "cancel":"Cancel",
+    "edit":"Edit",
+    "save":"Save"
 }

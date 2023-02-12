@@ -12,7 +12,7 @@ export default {
   props: {
     points_style: {
       type: String,
-      default: "",
+      default: "fibonnaci",
     },
   },
   methods: {
@@ -74,12 +74,16 @@ export default {
     z-index: 100;
 }
 
+.card-point img {
+  border-radius: 10px;
+}
+
 @media (max-width: 35em) {
   .cards-container {
     gap:5px
   }
   .card-point {
-    width: 70px;
+    width: 60px;
     height: auto;
   }
   .card-point .points {

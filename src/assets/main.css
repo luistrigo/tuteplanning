@@ -262,7 +262,6 @@ select {
   grid-template-rows: auto;
   grid-template-areas:
     "header header header header"
-    "main-info main-info main-info sidebar"
     "main main main sidebar"
     "footer footer footer footer";
   background-color: #fff;
@@ -278,9 +277,7 @@ select {
 .right-menu {
   grid-area: sidebar;
 }
-.main-info {
-  grid-area: main-info;
-}
+
 .main {
   grid-area: main;
 }
@@ -350,13 +347,20 @@ input:focus {
   color: hsl(var(--clr-dark));
   position: relative;
   z-index: 1;
-  display: inline-grid;
+  display: inline-block;
   place-items: center;
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: none;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: .375rem .75rem;
+  border-radius: .45rem;
+  border: 2px solid transparent;;
   text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
   cursor: pointer;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-image: none;
 }
 
 .btn-primary {
@@ -372,6 +376,7 @@ input:focus {
 .btn-primary-light {
   background: hsl(var(--clr-white));
   color: hsl(var(--clr-dark-secondary));
+  border-color:hsl(var(--clr-dark-secondary));
 }
 
 .btn-primary-light:hover {
@@ -403,6 +408,12 @@ input:focus {
 .card.md {
   max-width: 50%;
   margin: 10px auto;
+}
+
+.card-inline {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 /* unvisited link */
@@ -514,6 +525,7 @@ table td {
 
 .nav-buttons {
   display: flex;
+  align-items: center;
   gap: 10px;
 }
 
@@ -612,20 +624,46 @@ table td {
   margin-bottom: 10px;
 }
 
-.edit-store {
-  float:right;
+.edit-story {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.edit-story-buttons {
+  justify-content: space-between;
   display:flex;
   gap:10px;
+  margin-top: 10px;
 
 }
 
 .edit-sprint{
-  float:right;
   display: flex;
+  align-items: center;
   gap:10px;
 }
-.edit-data {
+.edit-data img {
   max-width: 20px;
+  margin: 0 auto;
+
+}
+
+.label-checkbox {
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+.label-checkbox .text-bold{
+  color: hsl(var(--clr-dark));
+  
+}
+
+.label-checkbox .text-bold{
+  color:hsl(var(--clr-disable))
+}
+
+.label-checkbox input{
+  display: none;
 }
 
 @media (max-width: 35em) {
@@ -634,8 +672,8 @@ table td {
     gap: 10px;
   }
 
-  .edit-data {
-    max-width: 25px;
+  .edit-sprint {
+    justify-content: end;
   }
 }
 
@@ -655,6 +693,12 @@ table td {
 
   .card.md {
     max-width: 100%;
+  }
+
+  .card-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
 
   .btn {
